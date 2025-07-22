@@ -8,19 +8,23 @@ inputs.nixpkgs.legacyPackages
     anki-with-addons = pkgs.anki.withAddons addons;
   in
   {
+
+    # NOTE: use mkqtwrapper
     default = pkgs.symlinkJoin {
       name = "anki";
       paths = [ anki-with-addons ];
       buildInputs = [ pkgs.makeWrapper ];
       postBuild = ''
         wrapProgram $out/bin/anki \
-          --prefix LD_LIBRARY_PATH : "${pkgs.lib.makeLibraryPath [
-            pkgs.qt6.qtbase
-            pkgs.qt6.qtwayland
-            pkgs.qt6.qtsvg
-            pkgs.qt6.qtdeclarative
-            pkgs.libglvnd
-          ]}"
+          --prefix LD_LIBRARY_PATH : "${
+            pkgs.lib.makeLibraryPath [
+              pkgs.qt6.qtbase
+              pkgs.qt6.qtwayland
+              pkgs.qt6.qtsvg
+              pkgs.qt6.qtdeclarative
+              pkgs.libglvnd
+            ]
+          }"
       '';
     };
   }
