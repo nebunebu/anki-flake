@@ -12,7 +12,7 @@
 }).withConfig
   {
     config = {
-      "Date Format" = "us";
+      "Date Format" = "%m/%d/%Y";
       "Note Correction Factors" = {
         "Test" = 1;
       };
