@@ -5,6 +5,9 @@ inputs.nixpkgs.legacyPackages
   _system: pkgs:
   let
     addons = import ./addons/default.nix { inherit pkgs; };
+    models = [
+      (import ./models/basic.nix)
+    ];
     anki-with-addons = pkgs.anki.withAddons addons;
   in
   {
