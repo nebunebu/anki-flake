@@ -100,8 +100,8 @@ pkgs.ankiAddons.recolor.withConfig {
         ];
         HIGHLIGHT_FG = [
           "Highlight text"
-          "#585b70"
-          "#585b70"
+          "#e0def4"
+          "#e0def4"
           "--highlight-fg"
         ];
         # NOTE: Good
