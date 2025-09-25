@@ -6,4 +6,5 @@
   (import ./more_overview_stats.nix { inherit pkgs; })
   (import ./recolor { inherit pkgs; })
   (import ./review-heatmap.nix { inherit pkgs; })
+  (import ./cloze-overlapper.nix { inherit pkgs; })
 ]
