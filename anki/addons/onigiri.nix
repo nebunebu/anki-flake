@@ -25,7 +25,7 @@
       "showCongratsProfileBar" = true;
       "congratsMessage" = "Congratulations! You have finished this deck for now.";
       "showWelcomePopup" = false;
-      "heatmapShape" = "square.svg";
+      "heatmapShape" = ../assets/check.svg;
       "heatmapShowStreak" = true;
       "heatmapShowMonths" = true;
       "heatmapShowWeekdays" = true;
@@ -107,7 +107,7 @@
           };
         };
       };
-      "onigiri_reviewer_bg_mode" = "image_color";
+      "onigiri_reviewer_bg_mode" = "color";
       "onigiri_reviewer_bg_main_blur" = 0;
       "onigiri_reviewer_bg_main_opacity" = 100;
       "onigiri_reviewer_bg_light_color" = "#faf4ed";
@@ -125,7 +125,7 @@
       "onigiri_reviewer_bottom_bar_bg_opacity" = 100;
       "onigiri_reviewer_bottom_bar_match_main_blur" = 5;
       "onigiri_reviewer_bottom_bar_match_main_opacity" = 90;
-      "onigiri_profile_page_bg_mode" = "color";
+      "onigiri_profile_page_bg_mode" = "image";
       "onigiri_profile_page_bg_light_color1" = "#faf4ed";
       "onigiri_profile_page_bg_dark_color1" = "#191724";
       "onigiri_profile_page_bg_light_color2" = "#f2e9e1";
@@ -133,7 +133,7 @@
       "modern_menu_profile_bg_mode" = "accent";
       "modern_menu_profile_bg_color_light" = "#faf4ed";
       "modern_menu_profile_bg_color_dark" = "#191724";
-      "modern_menu_profile_bg_image" = "";
+      "modern_menu_profile_bg_image" = ../assets/pfp-blue.png;
       "showHeatmapOnProfile" = true;
       "colors" = {
         "light" = {
