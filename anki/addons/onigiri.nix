@@ -11,6 +11,26 @@
   };
 }).withConfig
   {
+    userFiles =
+      pkgs.runCommand "anki-user-files"
+        {
+          pfpBlue = ../../assets/pfp-blue.png;
+          bkg = ../../assets/rose_pine_maze.png;
+          sbkg = ../../assets/rose_pine_shape.png;
+          pfpBkg = ../../assets/rose_pine_circle.png;
+        }
+        ''
+          # mkdir -p $out/fonts
+          mkdir -p $out/main_bg
+          mkdir -p $out/profile
+          mkdir -p $out/profile_bg
+          mkdir -p $out/sidebar_bg
+          # mkdir -p $out/user_themes
+          cp "$pfpBlue" "$out/profile/pfp-blue.png"
+          cp "$bkg" "$out/main_bg/rose_pine_maze.png"
+          cp "$sbkg" "$out/sidebar_bg/rose_pine_shape.png"
+          cp "$bkg" "$out/profile_bg/rose_pine_maze.png"
+        '';
     config = {
       "userName" = "nebu";
       "statsTitle" = "Today's Stats";
@@ -25,7 +45,7 @@
       "showCongratsProfileBar" = true;
       "congratsMessage" = "Congratulations! You have finished this deck for now.";
       "showWelcomePopup" = false;
-      "heatmapShape" = ../assets/check.svg;
+      "heatmapShape" = ../../assets/check.svg;
       "heatmapShowStreak" = true;
       "heatmapShowMonths" = true;
       "heatmapShowWeekdays" = true;
@@ -133,7 +153,7 @@
       "modern_menu_profile_bg_mode" = "accent";
       "modern_menu_profile_bg_color_light" = "#faf4ed";
       "modern_menu_profile_bg_color_dark" = "#191724";
-      "modern_menu_profile_bg_image" = ../assets/pfp-blue.png;
+      "modern_menu_profile_bg_image" = ../../assets/pfp-blue.png;
       "showHeatmapOnProfile" = true;
       "colors" = {
         "light" = {
