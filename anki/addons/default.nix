@@ -6,6 +6,13 @@
   (import ./more-overview-stats.nix { inherit pkgs; })
   (import ./webview-inspector.nix { inherit pkgs; })
   # (import ./recolor { inherit pkgs; })
-  (import ./onigiri.nix { inherit pkgs; })
+  # (import ./onigiri.nix { inherit pkgs; })
   # (import ./cloze-overlapper.nix { inherit pkgs; })
+
+  # fromLocalSource
+  (pkgs.anki-utils.buildAnkiAddon {
+    pname = "onigiri";
+    version = "1.0.3-beta";
+    src = ./local-sources/Onigiri;
+  })
 ]
