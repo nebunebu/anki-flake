@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 (pkgs.anki-utils.buildAnkiAddon {
-  pname = "anki21-addon-ankiwebview-inspector";
+  pname = "ankiw";
   version = "11-16-2025";
   src = pkgs.fetchFromGitHub {
     owner = "hikaru-y";
