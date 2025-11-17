@@ -33,12 +33,12 @@ pkgs.ankiAddons.recolor.withConfig {
           "#eb6f92"
           "--accent-danger"
         ];
-        BORDER = [
-          "Border"
-          "#26233a"
-          "#26233a"
-          "--border"
-        ];
+        # BORDER = [
+        #   "Border"
+        #   "#26233a"
+        #   "#26233a"
+        #   "--border"
+        # ];
         BORDER_FOCUS = [
           "Border (focused input)"
           "#f6c177"
