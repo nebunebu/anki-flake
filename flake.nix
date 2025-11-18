@@ -11,6 +11,13 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # External addon for development (Pattern 4)
+    # Uncomment and modify the path to use an external addon:
+    # external-addon = {
+    #   url = "path:/path/to/your/addon";
+    #   flake = false;
+    # };
   };
 
   outputs = inputs: {
