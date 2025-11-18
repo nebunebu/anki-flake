@@ -13,19 +13,19 @@
   (_: {
     installPhase = ''
       runHook preInstall
-      
+
       # 1. ORIGINAL COPY LOGIC from anki-utils.nix:
       mkdir -p "$out/$installPrefix/user_files"
       find . -mindepth 1 -maxdepth 1 | xargs -d'\n' mv -t "$out/$installPrefix/"
-      
+
       # 2. FIX: Move files from nested 'src' up one level:
       # Use mv with a wildcard to move the *contents* of src to the addon root.
       # The `mv` command is safer here since the files are already inside the output path.
       mv "$out/$installPrefix/src/"* "$out/$installPrefix/"
-      
+
       # 3. Clean up the now-empty nested 'src' directory.
       rmdir "$out/$installPrefix/src"
-      
+
       runHook postInstall
     '';
 

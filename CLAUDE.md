@@ -7,6 +7,7 @@ This document provides comprehensive guidance for AI assistants working with the
 **anki-flake** is a Nix flake for declaratively configuring Anki (spaced repetition software) with custom addons, themes, and configurations. It provides a reproducible, version-controlled way to manage your complete Anki setup.
 
 **Key Features:**
+
 - Declarative addon management using Nix
 - Custom theme configurations (Rose Pine color scheme)
 - Reproducible builds with pinned dependencies
@@ -14,6 +15,7 @@ This document provides comprehensive guidance for AI assistants working with the
 - Development environment with formatting and linting tools
 
 **Quick Start:**
+
 ```sh
 nix run github:nebunebu/anki-flake
 ```
@@ -54,11 +56,12 @@ anki-flake/
 The flake provides four main outputs:
 
 1. **packages.${system}.default**: Built Anki with all configured addons
-2. **devShells.${system}.default**: Development environment with tools
-3. **checks.${system}.formatting**: Code quality validation
-4. **formatter.${system}**: Code formatter (nixfmt + linters)
+1. **devShells.${system}.default**: Development environment with tools
+1. **checks.${system}.formatting**: Code quality validation
+1. **formatter.${system}**: Code formatter (nixfmt + linters)
 
 **Important Files:**
+
 - `flake.nix:20` - Package output points to `./anki`
 - `anki/default.nix:1-27` - Main package builder
 
@@ -130,16 +133,19 @@ inputs = {
 This pattern allows you to develop addons outside of the repository without git submodules. Simply provide a file path to your addon directory, and it will be automatically included in the build.
 
 **How it works:**
+
 1. Uncomment the `external-addon` input in `flake.nix`
-2. Point it to your addon directory (absolute path)
-3. The addon is automatically built and included via `anki/addons/default.nix:15-26`
+1. Point it to your addon directory (absolute path)
+1. The addon is automatically built and included via `anki/addons/default.nix:15-26`
 
 **Use cases:**
+
 - Developing new addons locally
 - Testing modifications to existing addons
 - Rapid iteration without committing to the repository
 
 **Important notes:**
+
 - Path must be absolute (e.g., `/home/user/addon`)
 - Only one external addon supported at a time
 - This is for **development only** - use Pattern 2 or 3 for production
@@ -201,6 +207,7 @@ nix fmt                  # Format all Nix and Markdown files
 ```
 
 Tools used (configured in `nix/treefmt.nix:1-18`):
+
 - **nixfmt**: Nix code formatting
 - **deadnix**: Remove unused variable bindings (with `--no-lambda-pattern-names`)
 - **statix**: Nix linter
@@ -217,6 +224,7 @@ nix flake check          # Run all checks (formatting validation)
 ### Nix Style
 
 1. **Use the pipe operator** (`|>`) for readability:
+
    ```nix
    # Good (used in anki/default.nix:3-4)
    inputs.nixpkgs.legacyPackages
@@ -226,7 +234,8 @@ nix flake check          # Run all checks (formatting validation)
    builtins.mapAttrs (...) inputs.nixpkgs.legacyPackages
    ```
 
-2. **Import patterns**:
+1. **Import patterns**:
+
    ```nix
    # Module entry point
    { pkgs, ... }:
@@ -235,10 +244,12 @@ nix flake check          # Run all checks (formatting validation)
    { inputs }:
    ```
 
-3. **Addon registry** (`anki/addons/default.nix:1-12`):
+1. **Addon registry** (`anki/addons/default.nix:1-12`):
+
    - Always returns a list
    - Comment out disabled addons (don't delete)
    - Use `inherit pkgs` when importing
+
    ```nix
    [
      pkgs.ankiAddons.prebaked-addon
@@ -247,10 +258,12 @@ nix flake check          # Run all checks (formatting validation)
    ]
    ```
 
-4. **Color definitions** (in recolor addon):
+1. **Color definitions** (in recolor addon):
+
    - Use 4-element arrays: `[description light-color dark-color css-var]`
    - Descriptive names for color values
    - Comment colors under development
+
    ```nix
    FG = [
      "Text"
@@ -260,7 +273,8 @@ nix flake check          # Run all checks (formatting validation)
    ];
    ```
 
-5. **Modular organization**:
+1. **Modular organization**:
+
    - Split complex configurations into separate files
    - Use `import` and merge with `//` operator
    - Keep related configs together (e.g., `recolor/` directory)
@@ -268,15 +282,18 @@ nix flake check          # Run all checks (formatting validation)
 ### Git Conventions
 
 1. **Commit messages**:
+
    - Short, imperative mood
    - Focus on what changed
    - Examples: "add recolor", "rm local-sources", "refactor recolor"
 
-2. **Branch naming**:
+1. **Branch naming**:
+
    - Feature branches: `claude/<description>-<session-id>`
    - Always push to branches starting with `claude/`
 
-3. **Build artifacts**:
+1. **Build artifacts**:
+
    - Never commit `result/` (Nix build output)
    - Ignore `.direnv/`, `.cache/`, `*.envrc`
 
@@ -285,11 +302,13 @@ nix flake check          # Run all checks (formatting validation)
 ### Adding a New Addon
 
 1. **Create addon definition** (if not in nixpkgs):
+
    ```sh
    # Create anki/addons/new-addon.nix
    ```
 
-2. **Add to registry**:
+1. **Add to registry**:
+
    ```nix
    # Edit anki/addons/default.nix
    [
@@ -298,7 +317,8 @@ nix flake check          # Run all checks (formatting validation)
    ]
    ```
 
-3. **Test the build**:
+1. **Test the build**:
+
    ```sh
    nix build
    ```
@@ -308,6 +328,7 @@ nix flake check          # Run all checks (formatting validation)
 For developing an addon outside this repository:
 
 1. **Enable external addon input** in `flake.nix`:
+
    ```nix
    external-addon = {
      url = "path:/path/to/your/addon";
@@ -315,13 +336,15 @@ For developing an addon outside this repository:
    };
    ```
 
-2. **Build and test**:
+1. **Build and test**:
+
    ```sh
    nix build    # Addon is automatically included
    nix run      # Test your addon in Anki
    ```
 
-3. **Iterate**:
+1. **Iterate**:
+
    - Make changes to your addon
    - Rebuild to see changes
    - No need to commit or add to repository
@@ -329,6 +352,7 @@ For developing an addon outside this repository:
 ### Modifying Colors/Theme
 
 Colors are defined in `anki/addons/recolor/`:
+
 - `buttons.nix` - Button colors
 - `canvas.nix` - Background colors
 - `card_states.nix` - Card state colors (new, learning, review, etc.)
@@ -336,19 +360,22 @@ Colors are defined in `anki/addons/recolor/`:
 - `scrollbar.nix` - Scrollbar styling
 
 **Steps:**
+
 1. Edit the appropriate color file
-2. Follow the 4-element array format: `[description light dark css-var]`
-3. Test with `nix build && ./result/bin/anki`
+1. Follow the 4-element array format: `[description light dark css-var]`
+1. Test with `nix build && ./result/bin/anki`
 
 ### Updating Dependencies
 
 1. **Update flake inputs**:
+
    ```sh
    nix flake update          # Update all inputs
    nix flake lock --update-input nixpkgs  # Update specific input
    ```
 
-2. **Update addon version**:
+1. **Update addon version**:
+
    ```nix
    # Edit the addon .nix file
    version = "2.1.37";  # Update version
@@ -356,7 +383,8 @@ Colors are defined in `anki/addons/recolor/`:
    hash = "";           # Clear hash, Nix will tell you the correct one
    ```
 
-3. **Get new hash**:
+1. **Get new hash**:
+
    ```sh
    nix build  # Will fail with correct hash
    # Copy the hash from error message and update the file
@@ -365,6 +393,7 @@ Colors are defined in `anki/addons/recolor/`:
 ### Formatting Before Commit
 
 **Always run before committing:**
+
 ```sh
 nix fmt                  # Format all code
 nix flake check          # Verify formatting
@@ -377,12 +406,12 @@ If checks fail, fix issues and re-run formatter.
 If Anki fails to start with Qt-related errors:
 
 1. **Check Qt6 wrapper** in `anki/default.nix:14-23`
-2. **Verify all Qt modules** are in `buildInputs`:
+1. **Verify all Qt modules** are in `buildInputs`:
    - `qt6.qtbase`
    - `qt6.qtwayland`
    - `qt6.qtsvg`
    - `qt6.qtdeclarative`
-3. **Ensure `wrapQtApp`** is called in `postBuild`
+1. **Ensure `wrapQtApp`** is called in `postBuild`
 
 ### Handling Addon Build Customization
 
@@ -408,6 +437,7 @@ Some addons need custom build phases (see `anki/addons/webview-inspector.nix` an
 ## Important Notes for AI Assistants
 
 ### DO:
+
 - ✅ Always run `nix fmt` before committing
 - ✅ Test builds with `nix build` after changes
 - ✅ Comment out disabled addons instead of deleting
@@ -419,6 +449,7 @@ Some addons need custom build phases (see `anki/addons/webview-inspector.nix` an
 - ✅ Use Pattern 4 (external addon) for development without submodules
 
 ### DON'T:
+
 - ❌ Commit build artifacts (`result/`, `.direnv/`)
 - ❌ Push to branches not starting with `claude/`
 - ❌ Mix light/dark colors inconsistently
@@ -472,6 +503,7 @@ When adding new color definitions, maintain consistency with this palette.
 ### Why symlinkJoin for Qt6?
 
 Direct use of `anki.withAddons` doesn't properly set up Qt6 environment variables. Using `symlinkJoin` with `wrapQtAppsHook` ensures:
+
 - Qt6 libraries are found at runtime
 - Wayland support works correctly
 - SVG/QML rendering functions properly
@@ -481,6 +513,7 @@ See commit `c8bcc50` ("use wrapQtAppsHook") for context.
 ### Why Modular Recolor Addon?
 
 The recolor addon has 100+ color definitions. Splitting into files:
+
 - Improves maintainability
 - Makes color changes easier to track in git
 - Allows focused changes without merge conflicts
@@ -500,8 +533,8 @@ nix log                   # Show build log
 ### Addon Not Loading
 
 1. Check addon is in `anki/addons/default.nix` (uncommented)
-2. Verify addon builds: `nix build .#default`
-3. Check for Python errors in Anki console
+1. Verify addon builds: `nix build .#default`
+1. Check for Python errors in Anki console
 
 ### Qt Runtime Errors
 
@@ -513,10 +546,11 @@ QT_DEBUG_PLUGINS=1 ./result/bin/anki
 ### Hash Mismatch
 
 When adding/updating addons:
+
 1. Set `hash = "";` in the addon definition
-2. Run `nix build`
-3. Copy the correct hash from error message
-4. Update the addon file with correct hash
+1. Run `nix build`
+1. Copy the correct hash from error message
+1. Update the addon file with correct hash
 
 ## Additional Resources
 
@@ -553,7 +587,7 @@ git commit -m "description"         # Commit
 git push -u origin <branch>         # Push to feature branch
 ```
 
----
+______________________________________________________________________
 
 **Last Updated:** 2025-11-18
 **Repository:** github:nebunebu/anki-flake
