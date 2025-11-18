@@ -1,4 +1,4 @@
-name: Multi-Platform CI
+name: Build
 
 on:
   push:
@@ -7,11 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  build-matrix:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+  build:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,4 +30,4 @@ jobs:
         run: |
           ls -la result/
           test -f result/bin/anki || exit 1
-          echo "✅ Package structure verified on ${{ matrix.os }}"
+          echo "✅ Package structure verified"
