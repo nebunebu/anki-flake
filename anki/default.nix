@@ -4,7 +4,10 @@ inputs.nixpkgs.legacyPackages
 |> builtins.mapAttrs (
   _system: pkgs:
   let
-    addons = import ./addons/default.nix { inherit pkgs; };
+    addons = import ./addons/default.nix {
+      inherit pkgs;
+      externalAddon = inputs.external-addon or null;
+    };
     anki-with-addons = pkgs.anki.withAddons addons;
   in
   {
