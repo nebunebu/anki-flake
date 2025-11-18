@@ -24,6 +24,7 @@ jobs:
 
       - name: Setup Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@v3
+        continue-on-error: true
 
       - name: Build package
         run: nix build --print-build-logs
