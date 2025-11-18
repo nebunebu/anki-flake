@@ -15,6 +15,9 @@ jobs:
 
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v9
+        with:
+          extra-conf: |
+            experimental-features = nix-command flakes pipe-operators
 
       - name: Setup Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@v3
