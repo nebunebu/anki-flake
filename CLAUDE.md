@@ -26,7 +26,6 @@ anki-flake/
 ├── flake.lock             # Locked dependency versions
 ├── README.md              # Basic project documentation
 ├── CLAUDE.md              # AI assistant guide (this file)
-├── EXTERNAL_ADDON_EXAMPLE.md  # Guide for Pattern 4 (external addons)
 ├── LICENSE                # MIT License
 ├── .gitignore             # Excludes build artifacts (/result, .direnv/, etc.)
 │
@@ -144,7 +143,6 @@ This pattern allows you to develop addons outside of the repository without git 
 - Path must be absolute (e.g., `/home/user/addon`)
 - Only one external addon supported at a time
 - This is for **development only** - use Pattern 2 or 3 for production
-- See `EXTERNAL_ADDON_EXAMPLE.md` for detailed usage guide
 
 **Example:** `anki/addons/default.nix:15-26`, `flake.nix:15-20`
 
@@ -328,8 +326,6 @@ For developing an addon outside this repository:
    - Rebuild to see changes
    - No need to commit or add to repository
 
-See `EXTERNAL_ADDON_EXAMPLE.md` for detailed usage.
-
 ### Modifying Colors/Theme
 
 Colors are defined in `anki/addons/recolor/`:
@@ -437,7 +433,7 @@ Some addons need custom build phases (see `anki/addons/webview-inspector.nix` an
 | Task | Files to Review |
 |------|----------------|
 | Adding addon | `anki/addons/default.nix`, addon examples |
-| External addon development | `flake.nix:15-20`, `EXTERNAL_ADDON_EXAMPLE.md` |
+| External addon development | `flake.nix:15-20`, `anki/addons/default.nix:15-26` |
 | Changing colors | `anki/addons/recolor/*.nix` |
 | Package issues | `anki/default.nix`, `flake.nix` |
 | Build problems | `anki/default.nix:11-24` (Qt wrapper) |
