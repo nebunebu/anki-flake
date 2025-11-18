@@ -233,10 +233,9 @@ This configuration uses the [Rose Pine](https://rosepinetheme.com/) color palett
 
 Contributions welcome! Please:
 
-1. Format code with `nix fmt`
-2. Run checks with `nix flake check`
-3. Test builds with `nix build`
-4. Use descriptive commit messages
+1. Run checks with `nix flake check`
+1. Test builds with `nix build`
+1. Use descriptive commit messages
 
 ## License
 

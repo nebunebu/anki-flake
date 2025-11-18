@@ -1,4 +1,8 @@
-{ pkgs, externalAddon ? null, ... }:
+{
+  pkgs,
+  externalAddon ? null,
+  ...
+}:
 let
   # Core addons list
   coreAddons = [
