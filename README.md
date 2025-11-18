@@ -56,6 +56,7 @@ nix develop
 ```
 
 Inside the shell you have access to:
+
 - `anki` - The configured Anki installation
 - `treefmt` - Code formatter
 - Development tools (nixfmt, deadnix, statix, mdformat)
