@@ -4,12 +4,15 @@ inputs.nixpkgs.legacyPackages
 |> builtins.mapAttrs (
   system: pkgs:
   let
-    # Allow unsupported packages on Darwin since Anki is not supported on macOS
+    # Allow unsupported and broken packages on Darwin since Anki is not fully supported on macOS
     pkgs' =
       if pkgs.stdenv.isDarwin then
         import inputs.nixpkgs {
           inherit system;
-          config.allowUnsupportedSystem = true;
+          config = {
+            allowUnsupportedSystem = true;
+            allowBroken = true;
+          };
         }
       else
         pkgs;
