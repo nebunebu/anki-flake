@@ -1,0 +1,32 @@
+name: Multi-Platform CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-matrix:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v9
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v3
+
+      - name: Build package
+        run: nix build --print-build-logs
+
+      - name: Verify package structure
+        run: |
+          ls -la result/
+          test -f result/bin/anki || exit 1
+          echo "✅ Package structure verified on ${{ matrix.os }}"

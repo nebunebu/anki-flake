@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v9
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v3
+
+      - name: Check flake
+        run: nix flake check --show-trace
+
+      - name: Build package
+        run: nix build --print-build-logs
+
+      - name: Build devShell
+        run: nix develop --command echo "Development shell loaded successfully"
