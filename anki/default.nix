@@ -4,22 +4,7 @@ inputs.nixpkgs.legacyPackages
 |> builtins.mapAttrs (
   _system: pkgs:
   let
-    # Collect all external addon inputs (those starting with "addon-dev-")
-    externalAddonInputs =
-      inputs
-      |> builtins.attrNames
-      |> builtins.filter (name: builtins.match "addon-dev-.*" name != null)
-      |> map (name: {
-        inherit name;
-        src = inputs.${name};
-      });
-
-    # External addon configurations (optional configs and overrides)
-    externalAddonConfigs = import ./addons/external.nix;
-
-    addons = import ./addons/default.nix {
-      inherit pkgs externalAddonInputs externalAddonConfigs;
-    };
+    addons = import ./addons { inherit pkgs inputs; };
     anki-with-addons = pkgs.anki.withAddons addons;
   in
   {
