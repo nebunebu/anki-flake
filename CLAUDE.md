@@ -35,7 +35,7 @@ anki-flake/
 │   ├── default.nix        # Main package builder with Qt6 wrapping
 │   └── addons/            # Addon configurations
 │       ├── default.nix    # Central addon registry (list of all enabled addons)
-│       ├── external.nix   # External addon configurations (for addon-dev-* inputs)
+│       ├── external.nix   # Example template for external addons
 │       ├── *.nix          # Individual addon configurations
 │       └── recolor/       # Modular theme addon (split into multiple files)
 │
@@ -119,48 +119,39 @@ pkgs.ankiAddons.recolor.withConfig {
 
 #### 4. External Addons (Development Pattern)
 
+External addons are configured just like other custom addons, but reference flake inputs for their source instead of fetching from GitHub.
+
 ```nix
-# flake.nix
+# 1. Add input in flake.nix
 inputs = {
   # ... other inputs ...
 
-  # Add multiple addons with the "addon-dev-" prefix
   addon-dev-my-plugin = {
     url = "path:/home/user/my-plugin";
     flake = false;
   };
-
-  addon-dev-another-addon = {
-    url = "path:/home/user/another-addon";
-    flake = false;
-  };
 };
-```
 
-This pattern allows you to develop multiple addons outside of the repository without git submodules. Any input with the `addon-dev-` prefix will be automatically detected and included in the build.
-
-**How it works:**
-
-1. Add inputs with the `addon-dev-` prefix in `flake.nix`
-1. Point each to an addon directory (absolute path)
-1. Configure addons in `anki/addons/external.nix` (optional)
-1. All matching addons are automatically built and included
-
-**Configuration options** (in `anki/addons/external.nix`):
-
-```nix
-{
-  addon-dev-my-plugin = {
-    pname = "my-plugin";      # Package name (default: derived from input)
-    version = "1.0.0";        # Version string (default: "dev")
-    config = {                # Addon configuration
-      "Enable Feature" = true;
-    };
-    overrideAttrs = oldAttrs: {  # Derivation overrides
-      nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [ python3 ];
-    };
+# 2. Create addon file (anki/addons/my-plugin.nix)
+{ pkgs, inputs }:
+let
+  src = inputs.addon-dev-my-plugin;
+in
+(pkgs.anki-utils.buildAnkiAddon {
+  pname = "my-plugin";
+  version = "dev";
+  inherit src;
+}).withConfig {
+  config = {
+    "Enable Feature" = true;
   };
 }
+
+# 3. Import in anki/addons/default.nix
+[
+  # ... other addons ...
+  (import ./my-plugin.nix { inherit pkgs inputs; })
+]
 ```
 
 **Use cases:**
@@ -168,15 +159,14 @@ This pattern allows you to develop multiple addons outside of the repository wit
 - Developing new addons locally
 - Testing modifications to existing addons
 - Rapid iteration without committing to the repository
-- Developing multiple addons simultaneously
 
 **Important notes:**
 
 - Path must be absolute (e.g., `/home/user/addon`)
-- Input names must start with `addon-dev-`
+- External addons receive `inputs` in addition to `pkgs`
 - This is for **development only** - use Pattern 2 or 3 for production
 
-**Example:** `anki/addons/default.nix:20-49`, `anki/addons/external.nix`, `flake.nix:15-28`
+**Example:** `anki/addons/external.nix` (template), `flake.nix:15-28`
 
 ### Qt6 Integration
 
@@ -353,43 +343,49 @@ nix flake check          # Run all checks (formatting validation)
 
 For developing addons outside this repository:
 
-1. **Add addon inputs** in `flake.nix` (use `addon-dev-` prefix):
+1. **Add addon input** in `flake.nix`:
 
    ```nix
    addon-dev-my-plugin = {
      url = "path:/home/user/my-plugin";
      flake = false;
    };
-
-   addon-dev-another = {
-     url = "path:/home/user/another";
-     flake = false;
-   };
    ```
 
-1. **Configure addons** (optional) in `anki/addons/external.nix`:
+1. **Create addon file** (e.g., `anki/addons/my-plugin.nix`):
 
    ```nix
-   {
-     addon-dev-my-plugin = {
-       config = { "Setting" = "value"; };
-       overrideAttrs = oldAttrs: { /* overrides */ };
-     };
+   { pkgs, inputs }:
+   let
+     src = inputs.addon-dev-my-plugin;
+   in
+   pkgs.anki-utils.buildAnkiAddon {
+     pname = "my-plugin";
+     version = "dev";
+     inherit src;
    }
+   ```
+
+   See `anki/addons/external.nix` for a full template with config and overrides.
+
+1. **Import in** `anki/addons/default.nix`:
+
+   ```nix
+   (import ./my-plugin.nix { inherit pkgs inputs; })
    ```
 
 1. **Build and test**:
 
    ```sh
-   nix build    # All addon-dev-* inputs are automatically included
-   nix run      # Test your addons in Anki
+   nix build
+   nix run
    ```
 
 1. **Iterate**:
 
-   - Make changes to your addons
+   - Make changes to your addon
    - Rebuild to see changes
-   - No need to commit or add to repository
+   - No need to commit the addon to this repository
 
 ### Modifying Colors/Theme
 
@@ -488,7 +484,7 @@ Some addons need custom build phases (see `anki/addons/webview-inspector.nix` an
 - ✅ Preserve color scheme consistency (Rose Pine theme)
 - ✅ Pin addon versions with content hashes
 - ✅ Use `inherit pkgs` when importing modules
-- ✅ Use Pattern 4 (external addons via `addon-dev-*` inputs) for development
+- ✅ Use `inherit pkgs inputs` for external addon imports
 
 ### DON'T:
 
@@ -506,7 +502,7 @@ Some addons need custom build phases (see `anki/addons/webview-inspector.nix` an
 | Task | Files to Review |
 |------|----------------|
 | Adding addon | `anki/addons/default.nix`, addon examples |
-| External addon development | `flake.nix:15-28`, `anki/addons/external.nix`, `anki/addons/default.nix:20-49` |
+| External addon development | `flake.nix:15-28`, `anki/addons/external.nix` (template) |
 | Changing colors | `anki/addons/recolor/*.nix` |
 | Package issues | `anki/default.nix`, `flake.nix` |
 | Build problems | `anki/default.nix:25-40` (Qt wrapper) |
@@ -631,6 +627,6 @@ git push -u origin <branch>         # Push to feature branch
 
 ______________________________________________________________________
 
-**Last Updated:** 2025-11-18
+**Last Updated:** 2025-11-19
 **Repository:** github:nebunebu/anki-flake
 **Maintained for:** AI assistant context and onboarding

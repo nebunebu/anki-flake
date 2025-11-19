@@ -1,33 +1,55 @@
-# External addon configurations
+# Example external addon template
 #
-# This file defines configurations for external addons added via flake inputs.
-# Each key should match the input name (e.g., "addon-dev-my-plugin").
+# Copy this file and modify it for your external addon.
+# External addons are configured just like other custom addons,
+# but reference flake inputs for their source.
 #
-# Available options for each addon:
-#   - pname: Package name (default: derived from input name)
-#   - version: Version string (default: "dev")
-#   - config: Addon configuration passed to .withConfig
-#   - overrideAttrs: Function to override derivation attributes
+# Usage:
+# 1. Add your addon input to flake.nix:
+#    addon-dev-my-plugin = {
+#      url = "path:/home/user/my-plugin";
+#      flake = false;
+#    };
 #
-# Example:
-# {
-#   addon-dev-my-plugin = {
-#     pname = "my-plugin";
-#     version = "1.0.0";
-#     config = {
-#       "Enable Feature" = true;
-#       "Theme" = "dark";
-#     };
-#     overrideAttrs = oldAttrs: {
-#       nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [ python3 ];
-#       buildPhase = ''
-#         # Custom build commands
-#       '';
-#     };
-#   };
+# 2. Copy this file to your addon name (e.g., my-plugin.nix)
 #
-#   addon-dev-simple-addon = {
-#     # Minimal config - just use defaults
+# 3. Import it in addons/default.nix:
+#    (import ./my-plugin.nix { inherit pkgs inputs; })
+{
+  pkgs,
+  inputs,
+}:
+let
+  # Reference your flake input
+  src = inputs.addon-dev-example;
+in
+# Simple addon (no config)
+pkgs.anki-utils.buildAnkiAddon {
+  pname = "example";
+  version = "dev";
+  inherit src;
+}
+
+# With configuration:
+# (pkgs.anki-utils.buildAnkiAddon {
+#   pname = "example";
+#   version = "dev";
+#   inherit src;
+# }).withConfig {
+#   config = {
+#     "Enable Feature" = true;
+#     "Theme" = "dark";
 #   };
 # }
-{ }
+
+# With build customization:
+# (pkgs.anki-utils.buildAnkiAddon {
+#   pname = "example";
+#   version = "dev";
+#   inherit src;
+# }).overrideAttrs (oldAttrs: {
+#   nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [ pkgs.python3 ];
+#   buildPhase = ''
+#     # Custom build commands
+#   '';
+# })
