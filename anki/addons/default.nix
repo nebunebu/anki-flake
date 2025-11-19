@@ -1,6 +1,7 @@
 {
   pkgs,
-  externalAddon ? null,
+  externalAddonInputs ? [ ],
+  externalAddonConfigs ? { },
   ...
 }:
 let
@@ -16,17 +17,35 @@ let
     # (import ./cloze-overlapper.nix { inherit pkgs; })
   ];
 
-  # External addon (Pattern 4) - for development from external paths
-  externalAddonList =
-    if externalAddon != null then
-      [
-        (pkgs.anki-utils.buildAnkiAddon {
-          pname = "external-addon";
-          version = "dev";
-          src = externalAddon;
-        })
-      ]
-    else
-      [ ];
+  # Build external addons from path inputs with optional configs and overrides
+  buildExternalAddon =
+    { name, src }:
+    let
+      # Get config for this addon (if any)
+      addonConfig = externalAddonConfigs.${name} or { };
+
+      # Extract pname from config or derive from input name
+      pname = addonConfig.pname or (builtins.replaceStrings [ "addon-dev-" ] [ "" ] name);
+      version = addonConfig.version or "dev";
+
+      # Build the base addon
+      baseAddon = pkgs.anki-utils.buildAnkiAddon {
+        inherit pname version src;
+      };
+
+      # Apply overrides if specified
+      addonWithOverrides =
+        if addonConfig ? overrideAttrs then baseAddon.overrideAttrs addonConfig.overrideAttrs else baseAddon;
+
+      # Apply config if specified
+      addonWithConfig =
+        if addonConfig ? config then
+          addonWithOverrides.withConfig { config = addonConfig.config; }
+        else
+          addonWithOverrides;
+    in
+    addonWithConfig;
+
+  externalAddonList = map buildExternalAddon externalAddonInputs;
 in
 coreAddons ++ externalAddonList
