@@ -127,19 +127,40 @@ pkgs.ankiAddons.recolor.withConfig {
 
 #### 4. External Addon Development
 
-Develop addons outside this repository:
+Develop multiple addons outside this repository:
 
 ```nix
 # flake.nix
 inputs = {
-  external-addon = {
-    url = "path:/absolute/path/to/your/addon";
+  # Add addons with the "addon-dev-" prefix
+  addon-dev-my-plugin = {
+    url = "path:/home/user/my-plugin";
+    flake = false;
+  };
+
+  addon-dev-another = {
+    url = "path:/home/user/another-addon";
     flake = false;
   };
 };
 ```
 
-The addon is automatically built and included - perfect for rapid iteration.
+Configure each addon in `anki/addons/external.nix`:
+
+```nix
+{
+  addon-dev-my-plugin = {
+    config = {
+      "Enable Feature" = true;
+    };
+    overrideAttrs = oldAttrs: {
+      # Custom build overrides
+    };
+  };
+}
+```
+
+All `addon-dev-*` inputs are automatically built and included - perfect for rapid iteration.
 
 ### Customizing Colors
 
@@ -213,7 +234,7 @@ anki-flake/
 - **Reproducible**: Same build on any machine, every time
 - **Declarative**: Configuration as code, version controlled
 - **Isolated**: No conflicts with system packages
-- **Multi-system**: Works on Linux, macOS, and more
+- **Multi-system**: Works on Linux
 
 ## Color Scheme
 

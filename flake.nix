@@ -12,12 +12,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # External addon for development (Pattern 4)
-    # Uncomment and modify the path to use an external addon:
-    # external-addon = {
-    #   url = "path:/path/to/your/addon";
+    # External addons for development
+    # Add multiple addons using the "addon-dev-" prefix:
+    #
+    # addon-dev-my-plugin = {
+    #   url = "path:/home/user/my-plugin";
     #   flake = false;
     # };
+    #
+    # addon-dev-another-addon = {
+    #   url = "path:/home/user/another-addon";
+    #   flake = false;
+    # };
+    #
+    # Configure each addon in anki/addons/external.nix
   };
 
   outputs = inputs: {
