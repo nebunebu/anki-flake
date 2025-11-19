@@ -15,7 +15,7 @@
       pkgs.runCommand "anki-user-files"
         {
           pfpBlue = ../../assets/pfp-blue.png;
-          bkg = ../../assets/rose_pine_maze.png;
+          bkg = ../../assets/rose_pine_circle.png;
           sbkg = ../../assets/rose_pine_shape.png;
           pfpBkg = ../../assets/rose_pine_circle.png;
         }
@@ -27,9 +27,9 @@
           mkdir -p $out/sidebar_bg
           # mkdir -p $out/user_themes
           cp "$pfpBlue" "$out/profile/pfp-blue.png"
-          cp "$bkg" "$out/main_bg/rose_pine_maze.png"
+          cp "$bkg" "$out/main_bg/rose_pine_circle.png"
           cp "$sbkg" "$out/sidebar_bg/rose_pine_shape.png"
-          cp "$bkg" "$out/profile_bg/rose_pine_maze.png"
+          cp "$pfpBkg" "$out/profile_bg/rose_pine_circle.png"
         '';
     config = {
       "userName" = "nebu";
