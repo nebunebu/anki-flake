@@ -35,12 +35,15 @@ let
 
       # Apply overrides if specified
       addonWithOverrides =
-        if addonConfig ? overrideAttrs then baseAddon.overrideAttrs addonConfig.overrideAttrs else baseAddon;
+        if addonConfig ? overrideAttrs then
+          baseAddon.overrideAttrs addonConfig.overrideAttrs
+        else
+          baseAddon;
 
       # Apply config if specified
       addonWithConfig =
         if addonConfig ? config then
-          addonWithOverrides.withConfig { config = addonConfig.config; }
+          addonWithOverrides.withConfig { inherit (addonConfig) config; }
         else
           addonWithOverrides;
     in

@@ -2,7 +2,7 @@
 
 inputs.nixpkgs.legacyPackages
 |> builtins.mapAttrs (
-  system: pkgs:
+  _system: pkgs:
   let
     # Collect all external addon inputs (those starting with "addon-dev-")
     externalAddonInputs =
