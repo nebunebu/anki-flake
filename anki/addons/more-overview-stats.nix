@@ -26,8 +26,8 @@
       };
       "Show table for finished decks" = true;
       "Stat Colors" = {
-        "Days until done" = "#e0def4";
-        "Done on Date" = "#e0def4";
+        "Days until done" = "#31748f";
+        "Done on Date" = "#c4a7e7";
         "Learned" = "#31748f";
         "Learning" = "#eb6f92";
         "Mature" = "#c4a7e7";
@@ -35,7 +35,7 @@
         "Percent" = "#908caa";
         "Review" = "#31748f";
         "Suspended" = "#f6c177";
-        "Total" = "#e0def4";
+        "Total" = "#31748f";
         "Unseen" = "#eb6f92";
         "Young" = "#9ccfd8";
       };
