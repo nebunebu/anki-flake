@@ -35,6 +35,7 @@
         "Percent" = "#908caa";
         "Review" = "#31748f";
         "Suspended" = "#f6c177";
+        "Buried" = "#f6c177";
         "Total" = "#31748f";
         "Unseen" = "#eb6f92";
         "Young" = "#9ccfd8";
