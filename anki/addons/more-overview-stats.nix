@@ -1,18 +1,26 @@
 { pkgs, ... }:
 
-(pkgs.anki-utils.buildAnkiAddon {
-  pname = "anki-more-overview-stats";
-  version = "2.1.36";
-  src = pkgs.fetchFromGitHub {
-    owner = "patrick-mahnkopf";
-    repo = "Anki_More_Overview_Stats";
-    rev = "v2.1.36";
-    hash = "sha256-Mt6EqFmQChgOf7Y/JufFoL/fgpl5yBoqiyULlAbLqrE=";
-  };
-}).withConfig
+(
+  (pkgs.anki-utils.buildAnkiAddon {
+    pname = "anki-more-overview-stats";
+    version = "dev";
+    src = pkgs.fetchFromGitHub {
+      owner = "patrick-mahnkopf";
+      repo = "Anki_More_Overview_Stats";
+      rev = "239dccd68e2cc9e845b78947f6426b47a05582ea";
+      hash = "sha256-I5FjE7h2CaHzUuPFSK8DA91CJB+ngBs8ZF1UJo9gdNM=";
+    };
+  }).overrideAttrs
+  (oldAttrs: {
+    # use raw string
+    postPatch = (oldAttrs.postPatch or "") + ''
+      sed -i "147s/'/r'/" data.py
+    '';
+  })
+).withConfig
   {
     config = {
-      "Date Format" = "%m/%d/%Y";
+      "Date Format" = "us";
       "Note Correction Factors" = {
         "Test" = 1;
       };
