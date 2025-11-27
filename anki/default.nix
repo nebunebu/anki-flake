@@ -17,10 +17,15 @@ inputs.nixpkgs.legacyPackages
         pkgs.qt6.qtsvg
         pkgs.qt6.qtdeclarative
         pkgs.qt6.qtwayland
+        pkgs.kdePackages.qtstyleplugin-kvantum
+        pkgs.rose-pine-kvantum
       ];
       postBuild = ''
         wrapQtApp "$out/bin/anki"
       '';
+      qtWrapperArgs = [
+        "--set QT_STYLE_OVERRIDE kvantum"
+      ];
     };
   }
 )
