@@ -7,8 +7,8 @@
   ];
   STATE_LEARN = [
     "Learn"
-    "#585b70"
-    "#585b70"
+    "#31748f"
+    "#31748f"
     "--state-learn"
   ];
   STATE_MARKED = [
@@ -25,8 +25,8 @@
   ];
   STATE_REVIEW = [
     "Review"
-    "#585b70"
-    "#585b70"
+    "#eb6f92"
+    "#eb6f92"
     "--state-review"
   ];
   STATE_SUSPENDED = [

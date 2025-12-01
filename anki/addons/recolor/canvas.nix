@@ -26,12 +26,12 @@
     "#1f1d2e"
     "--canvas-glass"
   ];
-  # CANVAS_INSET = [
-  #   "Background (inset)"
-  #   "#e0def4"
-  #   "#e0def4"
-  #   "--canvas-inset"
-  # ];
+  CANVAS_INSET = [
+    "Background (inset)"
+    "#26233a"
+    "#26233a"
+    "--canvas-inset"
+  ];
   CANVAS_OVERLAY = [
     "Background (menu & tooltip)"
     "#26233a"
